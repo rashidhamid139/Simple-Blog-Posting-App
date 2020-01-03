@@ -27,8 +27,15 @@
            <span  class="back" style="padding-left:10px"> <a   href="{% url 'blog-about' %}">About</a></span>
         </div>
         <div>
-            <span class="back" style="padding-right:10px"> <a  href="#">Login</a></span>
-            <span class="back"> <a href="#">Register</a></span>
+            {% if user.is_authenticated %}
+                <span class="back" style="padding-right:10px"> <a  href="{% url 'post-create' %}">New Post</a></span>
+                <span class="back" style="padding-right:10px"> <a  href="{% url 'profile' %}">Profile</a></span>
+
+                <span class="back" style="padding-right:10px"> <a  href="{% url 'logout' %}">Logout</a></span>
+            {% else %}
+                <span class="back" style="padding-right:10px"> <a  href="{% url 'login' %}">Login</a></span>
+                <span class="back"> <a href="{% url 'users-register' %}">Register</a></span>
+            {% endif %}
         </div>
     </div>
     </nav>
