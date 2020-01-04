@@ -1,0 +1,21 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+</head>
+<body>
+    {% for post in posts %}
+        <h1>Post no: {{ post.id }}</h1>
+        <div class="btn-group">
+<!--            <button class="btn btn-block btn-primary"><i class="fa fa-thumbs-up">Like</i> </button>-->
+            <a href="{% url 'home' post.id %}" class="btn btn-info btn-small"><i class="glyphicon glyphicon-thumb"></i>Like </a>
+            <button type="button" class="btn btn-primary">{{post.count}}</button>
+        </div>
+    {% endfor %}
+
+</body>
+</html>

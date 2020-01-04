@@ -1,0 +1,38 @@
+{% extends 'blog/base.html' %}
+<!--{% load static %}-->
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Title</title>-->
+<!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">-->
+<!--    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}" >-->
+<!--</head>-->
+<!--<body>-->
+
+<!--    {% for post in posts %}-->
+<!--    <div class="ml-auto" style="width: 200px;">-->
+<!--        <h1 class="row btn-custom">Post no: {{ post.id }}</h1>-->
+<!--        <h3>Post Count: {{ post.count }}</h3>-->
+<!--        <h3>Post Author: {{ post.author.username }}</h3>-->
+<!--    </div>-->
+<!--    {% endfor %}-->
+<!--</body>-->
+<!--</html>-->
+
+
+{% block content %}
+    {% for post in posts %}
+        <article class="media content-section">
+          <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a class="mr-2" style="color:green"; href="#">{{ post.author }}</a>
+              <small class="text-muted">{{ post.date_posted|date:"F d, Y"}}</small>
+            </div>
+            <h2><a class="article-title" href="#">{{ post.title }}</a></h2>
+            <p class="article-content">{{ post.content }}</p>
+          </div>
+        </article>
+    {% endfor %}
+{% endblock %}

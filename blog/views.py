@@ -1,9 +1,17 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from .models import Post, Post_like
 from django.contrib.auth.models import User
-from .models import Post
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+
+# Create your views here.
+
+
+def home(request):
+    posts = Post.objects.all()
+    context = {
+        'posts': posts
+    }
+    return render(request, 'blog/home.html', context )
 
 
 def about(request):
@@ -11,66 +19,73 @@ def about(request):
 
 
 
-class PostListView(ListView):
-    model = Post
-    template_name = 'blog/home.html'
-    context_object_name = 'posts'
-    ordering = ['-date_posted']
-    paginate_by = 3
-
-class UserPostListView(LoginRequiredMixin, ListView):
-    model = Post
-    template_name = 'blog/user_posts.html'
-    context_object_name = 'posts'
-    paginate_by = 1
-
-    def get_queryset(self):
-        user = get_object_or_404(User, username = self.kwargs.get('username'))
-        return  Post.objects.filter(author = user).order_by('-date_posted')
-
-
-
-class PostDetailView(DetailView):
-    model = Post
-
-
-
-
-class PostCreateView(LoginRequiredMixin, CreateView):
-    model = Post
-    fields = ['title', 'content']
-
-    def form_valid(self, form):
-        form.instance.author = self.request.user
-        return super().form_valid(form)
-
-    # def test_func(self):
-        # post = self.get_object()
-        # if self.request.user == post.author:
-        #     return True
-        # return False
+def home1(request, pk):
+    user_id = request.user.id
+    post_id = pk
+    post_l = Post_like.objects.all().values_list('u_id', 'p_id')
+    liik = (user_id, post_id)
+    if user_id is not None:
+        if liik in post_l:
+            Post_like.objects.get(u_id = user_id, p_id= post_id).delete()
+            a = Post.objects.get(pk=post_id)
+            a.count = a.count - 1
+            a.save()
+            return redirect('blog-home')
+        else:
+            Post_like.objects.create(u_id=user_id, p_id=post_id)
+            a = Post.objects.get(pk=post_id)
+            a.count = a.count + 1
+            a.save()
+            return redirect('blog-home')
+    else:
+        return redirect('login')
+def goto(request):
+    posts = Post.objects.all()
+    return render(request, 'polls/home.html', {'posts': posts})
 
 
-class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    model = Post
-    fields = ['title', 'content']
 
-    def form_valid(self, form):
-        form.instance.author = self.request.user
-        return super().form_valid(form)
+def my_likes(request):
+    user_id = request.user.id
+    print(user_id)
+    posts = Post_like.objects.filter(u_id = user_id).values_list('p_id', flat=True)
+    posts = Post.objects.filter(pk__in=posts)
 
-    def test_func(self):
-        post = self.get_object()
-        if self.request.user == post.author:
-            return True
-        return False
+    return render(request, 'blog/goto.html', {'posts': posts})
 
-class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
-    model = Post
-    success_url = '/'
+'''
+from django.shortcuts import render, redirect
+from . models import Post, Post_like, User
 
-    def test_func(self):
-        post = self.get_object()
-        if self.request.user == post.author:
-            return True
-        return False
+
+def home1(request, pk):
+    user_id = 3
+    post_id = pk
+    post_l = Post_like.objects.all().values_list('u_id', 'p_id')
+    liik = (user_id, post_id)
+    if liik in post_l:
+        Post_like.objects.get(u_id = user_id, p_id= post_id).delete()
+        a = Post.objects.get(pk=post_id)
+        a.count = a.count - 1
+        a.save()
+        return redirect('blog-home')
+    else:
+        Post_like.objects.create(u_id=user_id, p_id=post_id)
+        a = Post.objects.get(pk=post_id)
+        a.count = a.count + 1
+        a.save()
+        return redirect('blog-home')
+def goto(request):
+    posts = Post.objects.all()
+    return render(request, 'polls/home.html', {'posts': posts})
+
+
+
+def my_likes(request):
+    user_id = 7
+    posts = Post_like.objects.filter(u_id = user_id).values_list('p_id', flat=True)
+    posts = Post.objects.filter(pk__in=posts)
+
+    return render(request, 'polls/goto.html', {'posts': posts})
+
+'''
