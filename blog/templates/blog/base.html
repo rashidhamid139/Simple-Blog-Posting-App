@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="{% static 'blog/main.css' %}">
 
     {% if title %}
@@ -28,6 +28,7 @@
         </div>
         <div>
             {% if user.is_authenticated %}
+                <span class="back" style="padding-right:10px"><a href="{% url 'post-create' %}">New Post</a> </span>
                 <span class="back" style="padding-right:10px"> <a  href="{% url 'profile' %}">Profile</a></span>
                 <span class="back" style="padding-right:10px"> <a  href="{% url 'logout' %}">Logout</a></span>
                 <span  class="back" style="padding-left:10px"> <a   href="{% url 'blog-like' %}">MyLikes</a></span>

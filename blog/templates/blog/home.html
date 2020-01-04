@@ -8,7 +8,7 @@
               <a class="mr-2" style="color:green"; href="#">{{ post.author }}</a>
               <small class="text-muted">{{ post.date_posted|date:"F d, Y"}}</small>
             </div>
-            <h2><a class="article-title" href="#">{{ post.title }}</a></h2>
+            <h2><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h2>
             <p class="article-content">{{ post.content }}</p>
             <a href="{% url 'home1' post.id %}" class="btn btn-info btn-small"><i class="glyphicon glyphicon-thumb"></i>Like </a>
             <button type="button" class="btn btn-primary">{{post.count}}</button>
